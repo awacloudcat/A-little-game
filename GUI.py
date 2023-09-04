@@ -134,11 +134,10 @@ def give():
     else:
         t1.insert(END,'物品不存在\n>>>')
 #伐木
-
-def logging():
-    pass
+def logging(r):
+    for i in range(r):
+        sleep(1)
 #指令识别
-all_command = ['/bag']
 def command():
     get = e1.get()
     if '/' in get:
