@@ -78,15 +78,6 @@ menu.add_command(label="退出程序",command=window.quit)
 mainmenu.add_cascade(label="更多...",menu=menu)
 window.config(menu=mainmenu)
 
-#清屏
-
-def clean():
-    true()
-    t1.delete("1.0","end")
-    e1.delete(0,END)
-    t1.insert(END,'>>>已执行清屏\n>>>')
-    false()
-
 #右侧信息
 Hp = 20
 Food = 20
@@ -110,11 +101,23 @@ msg6.place(x=650,y=60)
 def open_bag():
     file_bag = open('./data/bag.dat',mode='r+',encoding='UTF-8')
     str_bag = file_bag.read()
-    #输出
-    t1.insert(END,'你背包里有:')
-    t1.insert(END,str_bag)
-    t1.insert(END,'\n>>>')
     file_bag.close()
+    #输出
+    t1.insert(END,'你背包里有:' + str_bag + '\n>>>')
+
+#清屏
+
+def clean():
+    true()
+    t1.delete("1.0","end")
+    t1.insert(END,'>>>已执行清屏\n>>>')
+    false()
+
+#伐木
+def logging():
+
+    for i in range():
+        sleep(1)
 
 #向背包添加物品
 all_item = ['原木']
@@ -127,16 +130,11 @@ def give():
         file_bag = open('./data/bag.dat',mode='a',encoding='UTF-8')
         file_bag.write(str_item)
         file_bag.write(' ')
-        t1.insert(END,'向背包中添加了 ')
-        t1.insert(END,str_item)
-        t1.insert(END,'\n>>>')
         file_bag.close()
+        t1.insert(END,'获得了 ' + str_item + '\n>>>')
     else:
         t1.insert(END,'物品不存在\n>>>')
-#伐木
-def logging(r):
-    for i in range(r):
-        sleep(1)
+
 #指令识别
 def command():
     get = e1.get()
@@ -144,8 +142,10 @@ def command():
         #以下为指令添加
         if get == '/bag':
             open_bag()
-        elif get == '/cw':
+        elif get == '/clean':
             clean()
+        elif get == '/logging':
+            logging()
         elif '/give' in get:
             give()
         else:
