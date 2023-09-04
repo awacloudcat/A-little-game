@@ -2,23 +2,22 @@
 # -*- coding: UTF-8 -*-
 from tkinter import *
 import tkinter as tk
-                                                    #
-window = Tk()
-window.title("A game by playSgappy       ----仅供娱乐")           #窗口标题
-window.resizable(0,0)                               #固定窗口大小
+from time import *
 #GUI
 
+window = Tk()
+window.title("A game by playSgappy       ----仅供娱乐")
+window.resizable(0,0)
 
 #窗口位置
-width = 700     #宽
-height = 400    #高
+width = 700
+height = 400
 #获取屏幕分辨率
 screenwidth = window.winfo_screenwidth()
 screenheight = window.winfo_screenheight()
 #计算让窗口置于屏幕中心
 size_geo = '%dx%d+%d+%d' % (width,height,(screenwidth-width)/2,(screenheight-height)/2)
 window.geometry(size_geo)
-
 
 msg0 = Message(window,text='信息',width=100)
 msg1 = Message(window,text='血量：',width=100)
@@ -28,24 +27,24 @@ msg3 = Message(window,text='体力：',width=100)
 #输出框
 t1 = Text(window,width=83,height=28.5)
 t1.insert(END,'>>>')
-t1.place(x=0,y=0)                                   #位置
-t1.config(state='disabled')                         #关闭读写
+t1.place(x=0,y=0)
+t1.config(state='disabled')
 
 #输出框滚动条
 sbar1 = tk.Scrollbar(window)
-sbar1.place(height=380,x=580,y=0)                   #位置
-sbar1.config(command=t1.yview)                      #设置为竖滚动条
-t1.config(yscrollcommand=sbar1.set)                 #绑定输出框
+sbar1.place(height=380,x=580,y=0)
+sbar1.config(command=t1.yview)
+t1.config(yscrollcommand=sbar1.set)
 
 #输入框
 e1 = Entry(window)
-e1.place(width=580,height=20,x=0,y=380)             #位置
-e1.focus()                                          #设置焦点至输入框
+e1.place(width=580,height=20,x=0,y=380)
+e1.focus()
 
 #>>>和发送到输出框
 def enter_repost():
-    get = e1.get()                                  #获取输入信息
-    t1.insert(END,get)                              #向输出框添加获取的字符
+    get = e1.get()
+    t1.insert(END,get)
     t1.insert(END,'\n>>>')
 
 #定义函数，方便开关读写
@@ -110,9 +109,8 @@ msg6.place(x=650,y=60)
 
 #背包
 def open_bag():
-    file_bag = open(r'C:\game\data\bag.dat',mode='r+',encoding='UTF-8')
-    str_bag = file_bag.read()                      #读取（字符串）
-    bag = str_bag.split(' ')                        #（字符串）转换为列表
+    file_bag = open('./data/bag.dat',mode='r+',encoding='UTF-8')
+    str_bag = file_bag.read()
     #输出
     t1.insert(END,'你背包里有:')
     t1.insert(END,str_bag)
@@ -122,11 +120,12 @@ def open_bag():
 #向背包添加物品
 all_item = ['原木']
 def give():
-    file_bag = open(r'C:\game\data\bag.dat',mode='a+',encoding='UTF-8')
     get = e1.get()
+
     list_get = get.split(' ')
     str_item = ''.join(list_get[1])
     if str_item in all_item:
+        file_bag = open('./data/bag.dat',mode='r+',encoding='UTF-8')
         file_bag.write(str_item)
         file_bag.write(' ')
         t1.insert(END,'向背包中添加了 ')
@@ -137,10 +136,10 @@ def give():
         t1.insert(END,'物品不存在\n>>>')
 
 #指令识别
-all_command = ['/bag']   #指令列表
+all_command = ['/bag']
 def command():
-    get = e1.get()               #获取输入框字符
-    if '/' in get:               #判断是否为输入指令
+    get = e1.get()
+    if '/' in get:
         #以下为指令添加
         if get == '/bag':
             open_bag()
