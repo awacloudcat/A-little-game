@@ -114,16 +114,11 @@ def clean():
     false()
 
 #伐木
-def logging():
-
-    for i in range():
-        sleep(1)
 
 #向背包添加物品
 all_item = ['原木']
 def give():
     get = e1.get()
-
     list_get = get.split(' ')
     str_item = ''.join(list_get[1])
     if str_item in all_item:
@@ -144,8 +139,8 @@ def command():
             open_bag()
         elif get == '/clean':
             clean()
-        elif get == '/logging':
-            logging()
+        #elif get == '/logging':
+        #    logging()
         elif '/give' in get:
             give()
         else:
