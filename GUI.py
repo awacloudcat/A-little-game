@@ -19,11 +19,6 @@ screenheight = window.winfo_screenheight()
 size_geo = '%dx%d+%d+%d' % (width,height,(screenwidth-width)/2,(screenheight-height)/2)
 window.geometry(size_geo)
 
-msg0 = Message(window,text='信息',width=100)
-msg1 = Message(window,text='血量：',width=100)
-msg2 = Message(window,text='饱食度：',width=100)
-msg3 = Message(window,text='体力：',width=100)
-
 #输出框
 t1 = Text(window,width=83,height=28.5)
 t1.insert(END,'>>>')
@@ -53,7 +48,7 @@ def true():
 def false():
     t1.config(state='disabled')
 
-#右键弹出菜单
+#右键菜单
 '''def func():
     true()
     t1.insert(END,'*通过右键菜单发送的消息\n>>>')
@@ -95,10 +90,14 @@ def clean():
 #右侧信息
 Hp = 20
 Food = 20
-Energy = 20
+Goldcoin = 20
+msg0 = Message(window,text='信息',width=100)
+msg1 = Message(window,text='健康度：',width=100)
+msg2 = Message(window,text='饱食度：',width=100)
+msg3 = Message(window,text='金币：',width=100)
 msg4 = Message(window,width=30,text=Hp)
 msg5 = Message(window,width=30,text=Food)
-msg6 = Message(window,width=30,text=Energy)
+msg6 = Message(window,width=30,text=Goldcoin)
 msg0.place(x=625,y=0)
 msg1.place(x=600,y=20)
 msg2.place(x=600,y=40)
@@ -134,7 +133,10 @@ def give():
         file_bag.close()
     else:
         t1.insert(END,'物品不存在\n>>>')
+#伐木
 
+def logging():
+    pass
 #指令识别
 all_command = ['/bag']
 def command():
