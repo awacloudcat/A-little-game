@@ -95,10 +95,10 @@ def clean():
 #右侧信息
 Hp = 20
 Food = 20
-Stamina = 20
+Energy = 20
 msg4 = Message(window,width=30,text=Hp)
 msg5 = Message(window,width=30,text=Food)
-msg6 = Message(window,width=30,text=Stamina)
+msg6 = Message(window,width=30,text=Energy)
 msg0.place(x=625,y=0)
 msg1.place(x=600,y=20)
 msg2.place(x=600,y=40)
