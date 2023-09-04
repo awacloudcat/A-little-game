@@ -125,7 +125,7 @@ def give():
     list_get = get.split(' ')
     str_item = ''.join(list_get[1])
     if str_item in all_item:
-        file_bag = open('./data/bag.dat',mode='r+',encoding='UTF-8')
+        file_bag = open('./data/bag.dat',mode='a',encoding='UTF-8')
         file_bag.write(str_item)
         file_bag.write(' ')
         t1.insert(END,'向背包中添加了 ')
