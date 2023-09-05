@@ -48,15 +48,15 @@ def false():
     t1.config(state='disabled')
 
 #右键菜单
-'''def func():
+def func():
     true()
     t1.insert(END,'*通过右键菜单发送的消息\n>>>')
     false()
-menu = tk.Menu(window,tearoff=False)
-menu.add_command(label="执行",command=func)
+menu0 = Menu(window,tearoff=False)
+menu0.add_command(label="执行",command=func)
 def command(event):
-    menu.post(event.x_root,event.y_root)
-window.bind("<Button-3>",command)'''
+    menu0.post(event.x_root,event.y_root)
+window.bind("<Button-3>",command)
 
 #菜单
 def help():
