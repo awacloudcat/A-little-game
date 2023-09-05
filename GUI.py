@@ -1,7 +1,6 @@
 #!/usr/bin/python
 # -*- coding: UTF-8 -*-
 from tkinter import *
-import tkinter as tk
 from time import *
 #GUI
 
@@ -26,7 +25,7 @@ t1.place(x=0,y=0)
 t1.config(state='disabled')
 
 #输出框滚动条
-sbar1 = tk.Scrollbar(window)
+sbar1 = Scrollbar(window)
 sbar1.place(height=380,x=580,y=0)
 sbar1.config(command=t1.yview)
 t1.config(yscrollcommand=sbar1.set)
@@ -66,7 +65,7 @@ def help():
     false()
 def feedback():
     true()
-    t1.insert(END,'------------------------\n>>>请向作者QQ或邮箱反馈\n>>>QQ：2570043513（常用）\n>>>邮箱：2570043513@qq.com\n>>>------------------------\n>>>')
+    t1.insert(END,'------------------------\n>>>请向作者QQ或邮箱反馈\n>>>QQ：2570043513\n>>>邮箱：2570043513@qq.com\n>>>------------------------\n>>>')
     false()
 mainmenu = Menu(window)
 menu = Menu(mainmenu,tearoff=False)
@@ -86,9 +85,9 @@ msg0 = Message(window,text='信息',width=100)
 msg1 = Message(window,text='健康度：',width=100)
 msg2 = Message(window,text='饱食度：',width=100)
 msg3 = Message(window,text='金币：',width=100)
-msg4 = Message(window,width=30,text=Hp)
-msg5 = Message(window,width=30,text=Food)
-msg6 = Message(window,width=30,text=Goldcoin)
+msg4 = Message(window,text=Hp)
+msg5 = Message(window,text=Food)
+msg6 = Message(window,text=Goldcoin)
 msg0.place(x=625,y=0)
 msg1.place(x=600,y=20)
 msg2.place(x=600,y=40)
@@ -96,6 +95,19 @@ msg3.place(x=600,y=60)
 msg4.place(x=650,y=20)
 msg5.place(x=650,y=40)
 msg6.place(x=650,y=60)
+
+#程序运行时间
+star=time()
+def gettime(): 
+    elap = time()-star
+    minutes = int(elap/60)
+    seconds = int(elap-minutes*60.0)
+    var.set('%02d:%02d' %(minutes, seconds))
+    window.after(1000,gettime)
+var = StringVar()
+lb = Label(window,textvariable=var)
+lb.place(x=620,y=350)
+gettime()
 
 #背包
 def open_bag():
@@ -106,14 +118,28 @@ def open_bag():
     t1.insert(END,'你背包里有:' + str_bag + '\n>>>')
 
 #清屏
-
 def clean():
     true()
     t1.delete("1.0","end")
     t1.insert(END,'>>>已执行清屏\n>>>')
     false()
 
-#伐木
+#伐木-未完善
+def start_lg():
+    t1.insert(END,'已开始计时\n>>>')
+    global start_t
+    start_t = time()
+    global lg
+    lg = Button(window,text='Stop',command=stop_lg)
+    lg.place(width=80,height=20,x=600,y=300)
+def stop_lg():
+    stop_t = time()
+    t = stop_t - start_t
+    t = str(int(t))
+    true()
+    t1.insert(END,'计时结束,时间为 ' + t + ' s\n>>>')
+    false()
+    lg.destroy()
 
 #向背包添加物品
 all_item = ['原木']
@@ -139,8 +165,8 @@ def command():
             open_bag()
         elif get == '/clean':
             clean()
-        #elif get == '/logging':
-        #    logging()
+        elif get == '/lg':
+            start_lg()
         elif '/give' in get:
             give()
         else:
@@ -152,7 +178,7 @@ def on_enter():
     enter_repost()
     command()
     t1.see(END)
-    e1.delete(0,tk.END)
+    e1.delete(0,END)
     false()
 Enter = Button(window,text='Enter',command=on_enter)
 Enter.place(width=120,height=20,x=580,y=380)
@@ -163,7 +189,7 @@ def on_enter_key(event):
     enter_repost()
     command()
     t1.see(END)
-    e1.delete(0,tk.END)
+    e1.delete(0,END)
     false()
 e1.bind("<Return>", on_enter_key)
 
