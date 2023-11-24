@@ -7,22 +7,14 @@ time_start = time() #开始计时
 time_end = time()    #结束计时
 time_c= time_end - time_start   #运行所花时间
 print('time cost', time_c, 's')
+import tkinter as tk
 
+root = tk.Tk()
 
+text = tk.Text(root, width=30)
+text.pack()
 
+long_text = "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nam vitae leo varius, vestibulum risus id, faucibus mauris."
+text.insert(tk.END, long_text)
 
-
-def start_lg():
-    global startTime
-    startTime = localtime().tm_sec
-    global lg
-    lg = Button(window,text='Stop',command=stop_lg)
-    lg.pack()
-def stop_lg():
-    endTime = localtime().tm_sec
-    sec = abs(endTime-startTime)%60
-    var1.set('%02s' %(sec))
-    lg.destroy()
-var1 = StringVar()
-lb1 = Label(window,textvariable=var1)
-lb1.pack()
+root.mainloop()

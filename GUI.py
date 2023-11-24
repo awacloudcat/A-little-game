@@ -1,10 +1,11 @@
-#!/usr/bin/python
+#!/usr/bin/env python3
 # -*- coding: UTF-8 -*-
-from tkinter import *
-from time import *
+import tkinter as tk
+import time as tt
+import json
 #GUI
 
-window = Tk()
+window = tk.Tk()
 window.title("A game by playSgappy       ----仅供娱乐")
 window.resizable(0,0)
 
@@ -18,30 +19,30 @@ screenheight = window.winfo_screenheight()
 size_geo = '%dx%d+%d+%d' % (width,height,(screenwidth-width)/2,(screenheight-height)/2)
 window.geometry(size_geo)
 
-#输出框
-t1 = Text(window,width=83,height=28.5)
-t1.insert(END,'>>>')
-t1.place(x=0,y=0)
+#文本框
+t1 = tk.Text(window)
+t1.insert(tk.END,'>>>')
+t1.place(x=0,y=0,width=580,height=380)
 t1.config(state='disabled')
 
-#输出框滚动条
-sbar1 = Scrollbar(window)
+#文本框滚动条
+sbar1 = tk.Scrollbar(window)
 sbar1.place(height=380,x=580,y=0)
 sbar1.config(command=t1.yview)
 t1.config(yscrollcommand=sbar1.set)
 
 #输入框
-e1 = Entry(window)
+e1 = tk.Entry(window)
 e1.place(width=580,height=20,x=0,y=380)
 e1.focus()
 
-#>>>和发送到输出框
+#>>>和发送到文本框框
 def enter_repost():
     get = e1.get()
-    t1.insert(END,get)
-    t1.insert(END,'\n>>>')
+    t1.insert(tk.END,get)
+    t1.insert(tk.END,'\n>>>')
 
-#方便开关读写
+#方便开关文本框读写
 def true():
     t1.config(state='normal')
 def false():
@@ -50,9 +51,9 @@ def false():
 #右键菜单
 def func():
     true()
-    t1.insert(END,'*通过右键菜单发送的消息\n>>>')
+    t1.insert(tk.END,'*通过右键菜单发送的消息\n>>>')
     false()
-menu0 = Menu(window,tearoff=False)
+menu0 = tk.Menu(window,tearoff=False)
 menu0.add_command(label="执行",command=func)
 def command(event):
     menu0.post(event.x_root,event.y_root)
@@ -61,14 +62,14 @@ window.bind("<Button-3>",command)
 #菜单
 def help():
     true()
-    t1.insert(END,'暂时还没有帮助哦！\n>>>')
+    t1.insert(tk.END,'暂时还没有帮助哦！\n>>>')
     false()
 def feedback():
     true()
-    t1.insert(END,'------------------------\n>>>请向作者QQ或邮箱反馈\n>>>QQ：2570043513\n>>>邮箱：2570043513@qq.com\n>>>------------------------\n>>>')
+    t1.insert(tk.END,'------------------------\n>>>请向作者QQ或邮箱反馈\n>>>QQ：2570043513\n>>>邮箱：2570043513@qq.com\n>>>------------------------\n>>>')
     false()
-mainmenu = Menu(window)
-menu = Menu(mainmenu,tearoff=False)
+mainmenu = tk.Menu(window)
+menu = tk.Menu(mainmenu,tearoff=False)
 menu.add_command(label="帮助",command=help)
 menu.add_command(label="反馈",command=feedback)
 menu.add_command(label="待更新")
@@ -80,14 +81,14 @@ window.config(menu=mainmenu)
 #右侧信息
 Hp = 20
 Food = 20
-Goldcoin = 20
-msg0 = Message(window,text='信息',width=100)
-msg1 = Message(window,text='健康度：',width=100)
-msg2 = Message(window,text='饱食度：',width=100)
-msg3 = Message(window,text='金币：',width=100)
-msg4 = Message(window,text=Hp)
-msg5 = Message(window,text=Food)
-msg6 = Message(window,text=Goldcoin)
+Goldcoin = 1145
+msg0 = tk.Message(window,text='信息',width=100)
+msg1 = tk.Message(window,text='健康度：',width=100)
+msg2 = tk.Message(window,text='饱食度：',width=100)
+msg3 = tk.Message(window,text='金币：',width=100)
+msg4 = tk.Message(window,text=Hp)
+msg5 = tk.Message(window,text=Food)
+msg6 = tk.Message(window,text=Goldcoin)
 msg0.place(x=625,y=0)
 msg1.place(x=600,y=20)
 msg2.place(x=600,y=40)
@@ -97,51 +98,50 @@ msg5.place(x=650,y=40)
 msg6.place(x=650,y=60)
 
 #程序运行时间
-star=time()
+star=tt.time()
 def gettime(): 
-    elap = time()-star
+    elap = tt.time()-star
     minutes = int(elap/60)
     seconds = int(elap-minutes*60.0)
     var.set('%02d:%02d' %(minutes, seconds))
     window.after(1000,gettime)
-var = StringVar()
-lb = Label(window,textvariable=var)
+var = tk.StringVar()
+lb = tk.Label(window,textvariable=var)
 lb.place(x=620,y=350)
 gettime()
 
 #背包
 def open_bag():
-    file_bag = open('./data/bag.dat',mode='r+',encoding='UTF-8')
-    str_bag = file_bag.read()
-    file_bag.close()
+    with open('./data/bag.json',mode='r+',encoding='UTF-8') as f:
+        bag = json.dumps(json.load(f),ensure_ascii=False,indent=4,separators=(', ', ': '))
     #输出
-    t1.insert(END,'你背包里有:' + str_bag + '\n>>>')
+    t1.insert(tk.END,'你背包里有:' + bag + '\n>>>')
 
 #清屏
 def clean():
     t1.delete("1.0","end")
-    t1.insert(END,'>>>已执行清屏\n>>>')
+    t1.insert(tk.END,'>>>已执行清屏\n>>>')
 
 #伐木-未完善
 def start_lg():
-    t1.insert(END,'已开始伐木,右下角结束伐木\n>>>')
+    t1.insert(tk.END,'已开始伐木,右下角结束伐木\n>>>')
     global start_t
-    start_t = time()
     global lg
-    lg = Button(window,text='结束伐木',command=stop_lg)
+    start_t = tt.time()
+    lg = tk.Button(window,text='结束伐木',command=stop_lg)
     lg.place(width=80,height=20,x=600,y=300)
 def stop_lg():
-    stop_t = time()
+    stop_t = tt.time()
     t = stop_t - start_t
     t = str(int(t))
     w = str(int((int(t) / 10)))
     true()
-    t1.insert(END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>>')
+    t1.insert(tk.END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>')
     false()
     lg.destroy()
 
-#向背包添加物品
-all_item = ['原木']
+#向背包添加物品 - 暂废弃
+'''all_item = ['木头']
 def give():
     get = e1.get()
     list_get = get.split(' ')
@@ -151,9 +151,9 @@ def give():
         file_bag.write(item)
         file_bag.write(' ')
         file_bag.close()
-        t1.insert(END,'获得了 ' + item + '\n>>>')
+        t1.insert(tk.END,'获得了 ' + item + '\n>>>')
     else:
-        t1.insert(END,'物品不存在\n>>>')
+        t1.insert(tk.END,'物品不存在\n>>>')'''
 
 #指令识别
 def command():
@@ -166,20 +166,20 @@ def command():
             clean()
         elif get == '/lg':
             start_lg()
-        elif '/give' in get:
-            give()
+#        elif '/give' in get:
+#            give()
         else:
-            t1.insert(END,'错误：命令不存在\n>>>')
+            t1.insert(tk.END,'错误：命令不存在\n>>>')
 
 #按键Enter
 def enter():
     true()
     enter_repost()
     command()
-    t1.see(END)
-    e1.delete(0,END)
+    t1.see(tk.END)
+    e1.delete(0,tk.END)
     false()
-Enter = Button(window,text='Enter',command=enter)
+Enter = tk.Button(window,text='Enter',command=enter)
 Enter.place(width=120,height=20,x=580,y=380)
 
 #键盘Enter
@@ -187,8 +187,8 @@ def enter_key(event):
     true()
     enter_repost()
     command()
-    t1.see(END)
-    e1.delete(0,END)
+    t1.see(tk.END)
+    e1.delete(0,tk.END)
     false()
 e1.bind("<Return>", enter_key)
 
