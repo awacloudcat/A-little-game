@@ -41,7 +41,7 @@ def enter_repost():
     t1.insert(END,get)
     t1.insert(END,'\n>>>')
 
-#定义函数，方便开关读写
+#方便开关读写
 def true():
     t1.config(state='normal')
 def false():
@@ -119,25 +119,24 @@ def open_bag():
 
 #清屏
 def clean():
-    true()
     t1.delete("1.0","end")
     t1.insert(END,'>>>已执行清屏\n>>>')
-    false()
 
 #伐木-未完善
 def start_lg():
-    t1.insert(END,'已开始计时\n>>>')
+    t1.insert(END,'已开始伐木,右下角结束伐木\n>>>')
     global start_t
     start_t = time()
     global lg
-    lg = Button(window,text='Stop',command=stop_lg)
+    lg = Button(window,text='结束伐木',command=stop_lg)
     lg.place(width=80,height=20,x=600,y=300)
 def stop_lg():
     stop_t = time()
     t = stop_t - start_t
     t = str(int(t))
+    w = str(int((int(t) / 10)))
     true()
-    t1.insert(END,'计时结束,时间为 ' + t + ' s\n>>>')
+    t1.insert(END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>>')
     false()
     lg.destroy()
 
@@ -146,13 +145,13 @@ all_item = ['原木']
 def give():
     get = e1.get()
     list_get = get.split(' ')
-    str_item = ''.join(list_get[1])
-    if str_item in all_item:
+    item = ''.join(list_get[1])
+    if item in all_item:
         file_bag = open('./data/bag.dat',mode='a',encoding='UTF-8')
-        file_bag.write(str_item)
+        file_bag.write(item)
         file_bag.write(' ')
         file_bag.close()
-        t1.insert(END,'获得了 ' + str_item + '\n>>>')
+        t1.insert(END,'获得了 ' + item + '\n>>>')
     else:
         t1.insert(END,'物品不存在\n>>>')
 
@@ -173,24 +172,24 @@ def command():
             t1.insert(END,'错误：命令不存在\n>>>')
 
 #按键Enter
-def on_enter():
+def enter():
     true()
     enter_repost()
     command()
     t1.see(END)
     e1.delete(0,END)
     false()
-Enter = Button(window,text='Enter',command=on_enter)
+Enter = Button(window,text='Enter',command=enter)
 Enter.place(width=120,height=20,x=580,y=380)
 
 #键盘Enter
-def on_enter_key(event):
+def enter_key(event):
     true()
     enter_repost()
     command()
     t1.see(END)
     e1.delete(0,END)
     false()
-e1.bind("<Return>", on_enter_key)
+e1.bind("<Return>", enter_key)
 
 window.mainloop()
