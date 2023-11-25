@@ -36,7 +36,7 @@ e1 = tk.Entry(window)
 e1.place(width=580,height=20,x=0,y=380)
 e1.focus()
 
-#>>>和发送到文本框框
+#>>>和发送到文本框
 def enter_repost():
     get = e1.get()
     t1.insert(tk.END,get)
@@ -140,20 +140,28 @@ def stop_lg():
     false()
     lg.destroy()
 
-#向背包添加物品 - 暂废弃
-'''all_item = ['木头']
+#给予物品
+all_item = [
+    ['木头','石头'],
+    ['铁','金'],
+    ['小麦种子','水稻种子','土豆种子']
+]
 def give():
     get = e1.get()
     list_get = get.split(' ')
     item = ''.join(list_get[1])
-    if item in all_item:
-        file_bag = open('./data/bag.dat',mode='a',encoding='UTF-8')
-        file_bag.write(item)
-        file_bag.write(' ')
-        file_bag.close()
-        t1.insert(tk.END,'获得了 ' + item + '\n>>>')
+    qty = ''.join(list_get[2])
+    if item in all_item[0] or all_item[1] or all_item[2]:
+        with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
+            bag = json.load(r_f)
+            r_f.close()
+            bag[item] = bag[item] + int(qty)
+        with open("data\\bag.json",'w',encoding='utf-8') as w_f:
+            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
+            w_f.close()
+        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
     else:
-        t1.insert(tk.END,'物品不存在\n>>>')'''
+        t1.insert(tk.END,'物品不存在\n>>>')
 
 #指令识别
 def command():
@@ -166,8 +174,8 @@ def command():
             clean()
         elif get == '/lg':
             start_lg()
-#        elif '/give' in get:
-#            give()
+        elif '/give' in get:
+            give()
         else:
             t1.insert(tk.END,'错误：命令不存在\n>>>')
 
