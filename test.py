@@ -25,19 +25,23 @@ def open_bag():
         t1.insert(tk.END,'你背包里有:' + bag + '\n>>>')
 
 
-
-
-
-
-
-
+item = '木头'
+qty = 1
+with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
+            bag = json.load(r_f)
+            r_f.close()
+            bag[item] = bag[item] + int(qty)
+with open("data\\bag.json",'w',encoding='utf-8') as w_f:
+            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
+            w_f.close()
+t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
 
 #指令识别
 def command():
-    get = e1.get()
-    if '/' in get:
+    getting = e1.get()
+    if '/' in getting:
         #以下为指令添加
-        if get == '/bag':
+        if getting == '/bag':
             open_bag()
         else:
             t1.insert(tk.END,'错误：命令不存在\n>>>')

@@ -118,11 +118,51 @@ def open_bag():
     t1.insert(tk.END,'你背包里有:' + bag + '\n>>>')
 
 #清屏
-def clean():
+def clear():
     t1.delete("1.0","end")
     t1.insert(tk.END,'>>>已执行清屏\n>>>')
 
-#伐木-未完善
+#给予物品（指令）
+all_item = [
+    '木头','石头',
+    '铁','金',
+    '小麦种子','水稻种子','土豆种子'
+]
+def get():
+    get = e1.get()
+    list_get = get.split(' ')
+    item = ''.join(list_get[1])
+    qty = ''.join(list_get[2])
+    if item in all_item:
+        with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
+            bag = json.load(r_f)
+            r_f.close()
+            if item not in bag:
+                bag[item] = int(qty)
+            else:
+                bag[item] = bag[item] + int(qty)
+        with open("data\\bag.json",'w',encoding='utf-8') as w_f:
+            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
+            w_f.close()
+        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
+    else:
+        t1.insert(tk.END,'物品不存在\n>>>')
+#（机制）
+def give(item,qty):
+    if item in all_item:
+        with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
+            bag = json.load(r_f)
+            r_f.close()
+            if item not in bag:
+                bag[item] = int(qty)
+            else:
+                bag[item] = bag[item] + int(float(qty))
+        with open("data\\bag.json",'w',encoding='utf-8') as w_f:
+            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
+            w_f.close()
+        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
+
+#伐木
 def start_lg():
     t1.insert(tk.END,'已开始伐木,右下角结束伐木\n>>>')
     global start_t
@@ -133,51 +173,32 @@ def start_lg():
 def stop_lg():
     stop_t = tt.time()
     t = stop_t - start_t
+    w = str(int(int(t) / 1))
     t = str(int(t))
-    w = str(int((int(t) / 10)))
+    give('木头',w)
     true()
     t1.insert(tk.END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>')
     false()
     lg.destroy()
 
-#给予物品
-all_item = [
-    ['木头','石头'],
-    ['铁','金'],
-    ['小麦种子','水稻种子','土豆种子']
-]
-def give():
-    get = e1.get()
-    list_get = get.split(' ')
-    item = ''.join(list_get[1])
-    qty = ''.join(list_get[2])
-    if item in all_item[0] or all_item[1] or all_item[2]:
-        with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
-            bag = json.load(r_f)
-            r_f.close()
-            bag[item] = bag[item] + int(qty)
-        with open("data\\bag.json",'w',encoding='utf-8') as w_f:
-            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
-            w_f.close()
-        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
-    else:
-        t1.insert(tk.END,'物品不存在\n>>>')
-
 #指令识别
 def command():
-    get = e1.get()
-    if '/' in get:
+    getting = e1.get()
+    if '/' in getting:
         #以下为指令添加
-        if get == '/bag':
+        if getting == '/bag':
             open_bag()
-        elif get == '/clean':
-            clean()
-        elif get == '/lg':
+        elif getting == '/clear':
+            clear()
+        elif getting == '/lg':
             start_lg()
-        elif '/give' in get:
-            give()
+        elif '/get' in getting:
+            if getting == '/get':
+                t1.insert(tk.END,'Error:命令不完整\n>>>')
+            else:
+                get()
         else:
-            t1.insert(tk.END,'错误：命令不存在\n>>>')
+            t1.insert(tk.END,'Error:命令不存在\n>>>')
 
 #按键Enter
 def enter():
