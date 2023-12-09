@@ -4,7 +4,6 @@ import tkinter as tk
 import time as tt
 import json
 #GUI
-
 window = tk.Tk()
 window.title("A game by playSgappy       ----仅供娱乐")
 window.resizable(0,0)
@@ -167,25 +166,36 @@ def start_lg():
     t1.insert(tk.END,'已开始伐木,右下角结束伐木\n>>>')
     global start_t
     global lg
+    global lb1
     start_t = tt.time()
+    def lg_time():
+        t = str(round(tt.time() - start_t, 2))
+        w = str(int(float(t)) / 10)
+        var1.set('获得木头' + w + '个')
+        lb1.after(1,lg_time)
+    var1 = tk.StringVar()
+    lb1 = tk.Label(window,textvariable=var1)
+    lb1.place(width=80,height=20,x=600,y=280)
+    lg_time()
     lg = tk.Button(window,text='结束伐木',command=stop_lg)
     lg.place(width=80,height=20,x=600,y=300)
 def stop_lg():
     stop_t = tt.time()
-    t = stop_t - start_t
-    w = str(int(int(t) / 1))
+    t = round(stop_t - start_t,2)
+    w = str(int(int(t) / 10))
     t = str(int(t))
     give('木头',w)
     true()
     t1.insert(tk.END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>')
     false()
     lg.destroy()
+    lb1.destroy()
 
 #指令识别
 def command():
     getting = e1.get()
     if '/' in getting:
-        #以下为指令添加
+        #指令添加
         if getting == '/bag':
             open_bag()
         elif getting == '/clear':
