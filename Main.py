@@ -41,7 +41,7 @@ def enter_repost():
     t1.insert(tk.END,get)
     t1.insert(tk.END,'\n>>>')
 
-#方便开关文本框读写
+#开关文本框读写
 def true():
     t1.config(state='normal')
 def false():
@@ -85,24 +85,18 @@ window.config(menu=mainmenu)
 Hp = 20
 Food = 20
 Goldcoin = 1145
-msg0 = tk.Message(window,text='信息',width=100)
-msg1 = tk.Message(window,text='健康度：',width=100)
-msg2 = tk.Message(window,text='饱食度：',width=100)
-msg3 = tk.Message(window,text='金币：',width=100)
-msg4 = tk.Message(window,text=Hp)
-msg5 = tk.Message(window,text=Food)
-msg6 = tk.Message(window,text=Goldcoin)
-msg0.place(x=625,y=0)
+msg0 = tk.Message(window,text='信息（未启用）',width=100)
+msg1 = tk.Message(window,text=f'健康度：{Hp}',width=100)
+msg2 = tk.Message(window,text=f'饱食度：{Food}',width=100)
+msg3 = tk.Message(window,text=f'金币：  {Goldcoin}',width=100)
+msg0.place(x=600,y=0)
 msg1.place(x=600,y=20)
 msg2.place(x=600,y=40)
 msg3.place(x=600,y=60)
-msg4.place(x=650,y=20)
-msg5.place(x=650,y=40)
-msg6.place(x=650,y=60)
 
 #程序运行时间
 star=tt.time()
-def gettime(): 
+def gettime():
     elap = tt.time()-star
     minutes = int(elap/60)
     seconds = int(elap-minutes*60.0)
@@ -117,7 +111,6 @@ gettime()
 def open_bag():
     with open('./data/bag.json',mode='r+',encoding='UTF-8') as f:
         bag = json.dumps(json.load(f),ensure_ascii=False,indent=4,separators=(', ', ': '))
-    #输出
     t1.insert(tk.END,'你背包里有:' + bag + '\n>>>')
 
 #清屏
@@ -134,22 +127,31 @@ all_item = [
 def get():
     get = e1.get()
     list_get = get.split(' ')
-    item = ''.join(list_get[1])
-    qty = ''.join(list_get[2])
-    if item in all_item:
-        with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
-            bag = json.load(r_f)
-            r_f.close()
-            if item not in bag:
-                bag[item] = int(qty)
-            else:
-                bag[item] = bag[item] + int(qty)
-        with open("data\\bag.json",'w',encoding='utf-8') as w_f:
-            json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
-            w_f.close()
-        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
+    if get == '/get':
+        t1.insert(tk.END,'Error:命令无参数(/get [物品] [数量])\n>>>')
     else:
-        t1.insert(tk.END,'物品不存在\n>>>')
+        if len(list_get) == 3:
+            item = ''.join(list_get[1])
+            qty = ''.join(list_get[2])
+            if item in all_item:
+                if qty.isdigit() == True:
+                    with open('data\\bag.json',mode='r',encoding='UTF-8') as r_f:
+                        bag = json.load(r_f)
+                        r_f.close()
+                        if item not in bag:
+                            bag[item] = int(qty)
+                        else:
+                            bag[item] = bag[item] + int(qty)
+                    with open("data\\bag.json",'w',encoding='utf-8') as w_f:
+                        json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
+                        w_f.close()
+                    t1.insert(tk.END,f'获得了 {qty} 个 {item}\n>>>')
+                else:
+                    t1.insert(tk.END,'Error:数量参数不正确\n>>>')
+            else:
+                    t1.insert(tk.END,'Error:物品不存在\n>>>')
+        else:
+            t1.insert(tk.END,'Error:指令不完整\n>>>')
 #（机制）
 def give(item,qty):
     if item in all_item:
@@ -163,7 +165,7 @@ def give(item,qty):
         with open("data\\bag.json",'w',encoding='utf-8') as w_f:
             json.dump(bag,w_f,ensure_ascii=False,indent=4,separators=(', ', ': '))
             w_f.close()
-        t1.insert(tk.END,'获得了 '+ qty + ' 个 ' + item + '\n>>>')
+        t1.insert(tk.END,f'获得了 {qty} 个 {item}\n>>>')
 
 #伐木
 def start_lg():
@@ -190,7 +192,7 @@ def stop_lg():
     t = str(int(t))
     give('木头',w)
     true()
-    t1.insert(tk.END,'伐木结束,时间为' + t + 's,共获得木头' + w + '个\n>>>')
+    t1.insert(tk.END,f'伐木结束,时间为{t}s,共获得木头{w}个\n>>>')
     false()
     lg.destroy()
     lb1.destroy()
@@ -198,7 +200,7 @@ def stop_lg():
 #指令识别
 def command():
     getting = e1.get()
-    if '/' in getting:
+    if getting[0] == '/':
         #指令添加
         if getting == '/bag':
             open_bag()
@@ -207,10 +209,7 @@ def command():
         elif getting == '/lg':
             start_lg()
         elif '/get' in getting:
-            if getting == '/get':
-                t1.insert(tk.END,'Error:命令不完整\n>>>')
-            else:
-                get()
+            get()
         else:
             t1.insert(tk.END,'Error:命令不存在\n>>>')
 
